@@ -98,6 +98,14 @@ class IngestionService:
             raise RevisionConflict("Revision conflict during concurrent upload")
         return self._summary(doc, reused=False)
 
+    def get_source_pdf(self, document_id: str) -> bytes:
+        """Return original immutable PDF bytes under API authorization."""
+        with self.db.sessions() as session:
+            d = session.get(DocumentRecord, document_id)
+            if d is None:
+                raise NotFound("Document not found")
+            return d.raw_pdf
+
     def get_document(self, document_id: str) -> DocumentView:
         with self.db.sessions() as session:
             d = session.get(DocumentRecord, document_id)

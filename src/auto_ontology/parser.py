@@ -9,6 +9,7 @@ from .models import ParsedBlock
 MAX_BYTES = 15 * 1024 * 1024
 MAX_PAGES = 100
 MAX_TEXT_BLOCKS = 12000
+MAX_EXTRACTED_CHARACTERS = 2_000_000
 SECTION_PATTERN = re.compile(r"^\s*(\d+(?:\.\d+){1,6})\s+\S")
 
 
@@ -31,11 +32,15 @@ def parse_pdf(data: bytes) -> tuple[int, list[ParsedBlock]]:
             raise InvalidDocument("PDF exceeds maximum page count")
         results: list[ParsedBlock] = []
         current_section: str | None = None
+        total_characters = 0
         for page_index, page in enumerate(document):
             for row in page.get_text("blocks", sort=True):
                 if len(row) < 7 or row[6] != 0:
                     continue
                 text = str(row[4]).strip()
+                total_characters += len(text)
+                if total_characters > MAX_EXTRACTED_CHARACTERS:
+                    raise InvalidDocument("PDF exceeds maximum extracted text length")
                 if not text:
                     continue
                 heading = SECTION_PATTERN.match(text.splitlines()[0])

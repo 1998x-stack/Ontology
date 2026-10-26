@@ -7,7 +7,7 @@ from importlib.resources import files
 from typing import Annotated
 
 import yaml
-from fastapi import Depends, FastAPI, File, Form, Header, HTTPException, UploadFile
+from fastapi import Depends, FastAPI, File, Form, Header, HTTPException, UploadFile, Response
 
 from .db import Database
 from .models import CandidateView, DocumentView, IngestionResponse, SourceAnchorView
@@ -77,6 +77,18 @@ def create_app(*, database_url: str | None = None, api_key: str | None = None) -
             return service.get_document(document_id)
         except NotFound as exc:
             raise guard_error(exc) from exc
+
+    @app.get("/api/v1/documents/{document_id}/source", dependencies=[Depends(authenticated)])
+    def source_pdf(document_id: str) -> Response:
+        try:
+            contents = service.get_source_pdf(document_id)
+        except NotFound as exc:
+            raise guard_error(exc) from exc
+        return Response(content=contents, media_type="application/pdf", headers={
+            "Cache-Control": "no-store",
+            "X-Content-Type-Options": "nosniff",
+            "Content-Disposition": 'inline; filename="source.pdf"'
+        })
 
     @app.get("/api/v1/documents/{document_id}/candidates", response_model=list[CandidateView], dependencies=[Depends(authenticated)])
     def candidates(document_id: str) -> list[CandidateView]:
