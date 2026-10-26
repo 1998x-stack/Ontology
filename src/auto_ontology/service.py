@@ -11,6 +11,7 @@ from .db import AnchorRecord, CandidateRecord, Database, DocumentRecord, Extract
 from .extractor import extract_candidates
 from .models import CandidateView, DocumentView, IngestionResponse, SourceAnchorView, TimingConstraint
 from .parser import parse_pdf
+from .validation import load_contract, validate_candidate
 
 
 class RevisionConflict(ValueError):
@@ -50,6 +51,9 @@ class IngestionService:
 
         pages, blocks = parse_pdf(pdf)
         extracted = extract_candidates(blocks)
+        contract = load_contract()
+        for candidate in extracted:
+            validate_candidate(candidate, blocks[candidate.anchor_index])
         doc = DocumentRecord(
             project_id=project_id, document_code=document_code, revision=revision,
             filename=filename[:256], raw_pdf=pdf, sha256=digest,
@@ -82,7 +86,7 @@ class IngestionService:
                     ))
                 session.add(ExtractionRun(
                     document_id=doc.id, extractor="deterministic-regex-v1",
-                    schema_version="0.1.0", status="completed",
+                    schema_version=contract["schema_version"], status="completed",
                     candidate_count=len(extracted)
                 ))
         except IntegrityError:

@@ -3,16 +3,15 @@ from __future__ import annotations
 
 import os
 import secrets
-from importlib.resources import files
 from typing import Annotated
 
-import yaml
 from fastapi import Depends, FastAPI, File, Form, Header, HTTPException, UploadFile, Response
 
 from .db import Database
 from .models import CandidateView, DocumentView, IngestionResponse, SourceAnchorView
 from .parser import InvalidDocument, MAX_BYTES
 from .service import IngestionService, NotFound, RevisionConflict
+from .validation import load_contract
 
 
 def create_app(*, database_url: str | None = None, api_key: str | None = None) -> FastAPI:
@@ -45,7 +44,7 @@ def create_app(*, database_url: str | None = None, api_key: str | None = None) -
 
     @app.get("/api/v1/schema", dependencies=[Depends(authenticated)])
     def schema() -> dict:
-        return yaml.safe_load(files("auto_ontology").joinpath("schemas/automotive.yaml").read_text(encoding="utf-8"))
+        return load_contract()
 
     @app.post("/api/v1/documents", response_model=IngestionResponse, status_code=201, dependencies=[Depends(authenticated)])
     async def upload(
