@@ -9,7 +9,7 @@
 2. [上游项目源码与能力审查](research/02-project-deep-dive.md) — Docling Graph、Neo4j Graph Builder、OpenSPG/KAG、KnowledgeGraphBuilder 等
 3. [汽车标准与语义互操作](research/03-automotive-standards.md) — VSS/VSSo、DBC、ReqIF、SAMM、OWL/SHACL
 4. [证据登记册](research/04-evidence-register.md) — 固定上游版本、代码路径、已验证与待验证区分
-6. [源码级审查](research/05-source-code-audit.md) — provenance 源码、节点合并风险、抽取 API 持久性与安全
+5. [源码级审查](research/05-source-code-audit.md) — provenance 源码、节点合并风险、抽取 API 持久性与安全
 6. [目标架构与 ADR](architecture/01-target-architecture.md)
 7. [本体领域模型](architecture/02-domain-ontology.md)
 8. [版本、溯源与可信发布](architecture/03-versioning-provenance.md)
