@@ -1,0 +1,33 @@
+schema_version: 0.1.0
+status: draft
+description: Stage 1 candidate-fact ontology contract. No facts can be approved.
+classes:
+  DocumentRevision:
+    properties: [project_id, document_code, revision, sha256]
+  SourceAnchor:
+    properties: [document_id, page_no, bbox, source_text, text_sha256]
+  RequirementStatement:
+    properties: [document_id, source_anchor_id, source_text]
+  AtomicRequirementCandidate:
+    properties: [source_anchor_id, actor_mention, signal_mentions, quality_flags]
+  ECU:
+    properties: [canonical_key, name]
+    availability: planned_stage_2
+  Signal:
+    properties: [canonical_key, name]
+    availability: planned_stage_2
+relations:
+  - key: HAS_ANCHOR
+    subject: DocumentRevision
+    object: SourceAnchor
+  - key: SOURCED_FROM
+    subject: AtomicRequirementCandidate
+    object: SourceAnchor
+  - key: USES_SIGNAL
+    subject: AtomicRequirementCandidate
+    object: Signal
+    availability: planned_stage_2
+security:
+  candidate_only: true
+  provenance_required: true
+  default_publish_allowed: false

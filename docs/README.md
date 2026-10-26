@@ -45,3 +45,7 @@
 - [NORMA](https://github.com/Destivano/NORMA)
 
 阅读具体技术结论时应同时参照 [证据登记册](research/04-evidence-register.md) 的固定 commit 和限制说明。
+
+## 分阶段任务与 v1.0 实施
+
+查看 [Stage 0–5 任务分解与交付状态](stages/README.md)、[v1.0 运行手册](stages/v1.0-runbook.md) 和 [v1.0 实施记录](stages/v1.0-implementation-log.md)。状态以独立测试和 CI 为准，详细研究设计不代表已完成系统实现。

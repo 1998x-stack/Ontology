@@ -1,0 +1,25 @@
+name: v1.0 stage1 CI
+on:
+  push:
+    branches: [main, v1.0]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Install
+        run: python -m pip install -e ".[dev]"
+      - name: Check syntax
+        run: python -m compileall -q src tests
+      - name: Test
+        run: python -m pytest -q

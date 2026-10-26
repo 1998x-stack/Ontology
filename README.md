@@ -13,3 +13,20 @@
 ## 先做什么
 
 先以去敏示例完成 `RequirementStatement → AtomicRequirement → SourceAnchor → Signal/ECU → TestObligation → TestCase` 的垂直切片，验证逻辑/来源/版本/权限，再扩展到跨文档变更分析。具体路线见 [Roadmap](docs/delivery/02-roadmap.md)。
+
+## v1.0 Stage 1 implementation
+
+`v1.0` implements a **candidate-only** ingestion proof of concept: PyMuPDF PDF parsing, deterministic normative-sentence extraction, source anchors, idempotent SQLAlchemy persistence, authenticated FastAPI endpoints, CLI, and pytest CI. **No LLM/Neo4j/approval or published engineering facts yet.**
+
+- [Stage 0–5 task ledger](docs/stages/README.md)
+- [Stage 1 implementation tasks](docs/stages/stage-1-document-ingestion.md)
+- [Installation and API runbook](docs/stages/v1.0-runbook.md)
+
+Quick start:
+
+```bash
+python -m pip install -e '.[dev]'
+python -m pytest -q
+export ONTOLOGY_API_KEY='your-local-development-key'
+ontology serve
+```
