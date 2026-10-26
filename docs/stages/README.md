@@ -27,4 +27,4 @@
 
 Stage 1 先实现**确定性 baseline**（而非尚未接通的外部 LLM），包含 PDF page/text block 解析、normative 语句候选、证据、关系数据库持久化、REST API/CLI 和 CI。目的是首先固定数据契约与正确性边界；之后接 Docling Graph/LLM provider 时可以进行同输入 A/B 测试。
 
-参见 [v1.0 交付追踪](v1.0-implementation-log.md)。
+参见 [v1.0 交付追踪](v1.0-implementation-log.md)、[验收报告](v1.0-acceptance-report.md)。
